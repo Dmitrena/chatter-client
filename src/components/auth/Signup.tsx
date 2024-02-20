@@ -1,15 +1,15 @@
-import { Link } from "react-router-dom";
-import { Link as MUILink } from "@mui/material";
-import Auth from "./Auth";
-import { useCreateUser } from "../../hooks/useCreateUser";
-import { useState } from "react";
-import { extractErrorMessage } from "../../utils/errors";
-import { useLogin } from "../../hooks/useLogin";
-import { UNKNOWN_ERROR_MESSAGE } from "../../constants/errors";
+import { Link as MUILink } from '@mui/material';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { UNKNOWN_ERROR_MESSAGE } from '../../constants/errors';
+import { useCreateUser } from '../../hooks/useCreateUser';
+import { useLogin } from '../../hooks/useLogin';
+import { extractErrorMessage } from '../../utils/errors';
+import Auth from './Auth';
 
 const Signup = () => {
   const [createUser] = useCreateUser();
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const { login } = useLogin();
 
   return (
@@ -27,7 +27,7 @@ const Signup = () => {
             },
           });
           await login({ email, password });
-          setError("");
+          setError('');
         } catch (err) {
           const errorMessage = extractErrorMessage(err);
           if (errorMessage) {
@@ -38,7 +38,7 @@ const Signup = () => {
         }
       }}
     >
-      <Link to={"/login"} style={{ alignSelf: "center" }}>
+      <Link to={'/login'} style={{ alignSelf: 'center' }}>
         <MUILink>Login</MUILink>
       </Link>
     </Auth>
