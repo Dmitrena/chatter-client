@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { authenticatedVar } from '../../constants/authenticated';
-import { UNKNOWN_ERROR_SNACK_MESSAGE } from '../../constants/errors';
 import excludedRoutes from '../../constants/excluded-routes';
-import { snackVar } from '../../constants/snack';
 import { useGetMe } from '../../hooks/useGetMe';
+import { authenticatedVar } from '../../constants/authenticated';
+import { snackVar } from '../../constants/snack';
+import { UNKNOWN_ERROR_SNACK_MESSAGE } from '../../constants/errors';
 import { usePath } from '../../hooks/usePath';
 
 interface GuardProps {

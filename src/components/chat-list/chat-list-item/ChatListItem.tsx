@@ -1,39 +1,55 @@
-import { ListItemButton } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
-import { Chat } from '../../../gql/graphql';
+import {
+  Avatar,
+  Box,
+  Divider,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from '@mui/material';
 import router from '../../Routes';
+import { Chat } from '../../../gql/graphql';
+import './ChatListItem.css';
 
-interface ChatListProps {
+interface ChatListItemProps {
   chat: Chat;
+  selected: boolean;
 }
 
-const ChatListItem = ({ chat }: ChatListProps) => {
+const ChatListItem = ({ chat, selected }: ChatListItemProps) => {
   return (
     <>
       <ListItem alignItems="flex-start" disablePadding>
-        <ListItemButton onClick={() => router.navigate(`/chats/${chat._id}`)}>
+        <ListItemButton
+          onClick={() => router.navigate(`/chats/${chat._id}`)}
+          selected={selected}
+        >
           <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+            <Avatar alt="Remy Sharp" src={chat.latestMessage?.user.imageUrl} />
           </ListItemAvatar>
           <ListItemText
             primary={chat.name}
             secondary={
-              <>
-                <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
-                  Ali Connors
+              <Box
+                sx={{ display: 'flex', flexDirection: 'row', gap: '0.5rem' }}
+              >
+                <Typography
+                  component="span"
+                  variant="body2"
+                  sx={{ color: 'text.primary', display: 'inline' }}
+                >
+                  {chat.latestMessage?.user.username || ''}
                 </Typography>
-                {" — I'll be in your neighborhood doing errands this…"}
-              </>
+                <div className="content">
+                  {' ' + (chat.latestMessage?.content || '')}
+                </div>
+              </Box>
             }
           />
         </ListItemButton>
       </ListItem>
-      <Divider variant="inset" component="li" />
+      <Divider variant="inset" />
     </>
   );
 };

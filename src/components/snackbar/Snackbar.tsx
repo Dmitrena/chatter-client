@@ -1,51 +1,63 @@
-import Stack from "@mui/material/Stack";
-import { Snackbar as MUISnackbar } from "@mui/material";
-import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import { forwardRef } from "react";
-import { useReactiveVar } from "@apollo/client";
-import { snackVar } from "../../constants/snack";
-
-const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+import Button from '@mui/material/Button';
+import SnackbarMui, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import { Fragment } from 'react/jsx-runtime';
+import { useReactiveVar } from '@apollo/client';
+import { snackVar } from '../../constants/snack';
+import { Alert } from '@mui/material';
 
 const Snackbar = () => {
   const snack = useReactiveVar(snackVar);
 
   const handleClose = (
-    _event?: React.SyntheticEvent | Event,
-    reason?: string
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
   ) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
 
     snackVar(undefined);
   };
 
+  const action = (
+    <Fragment>
+      <Button color="secondary" size="small" onClick={handleClose}>
+        UNDO
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </Fragment>
+  );
+
   return (
-    <>
+    <div>
       {snack && (
-        <Stack spacing={2} sx={{ width: "100%" }}>
-          <MUISnackbar
-            open={!!snack}
-            autoHideDuration={6000}
+        <SnackbarMui
+          open={!!snack}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message="Note archived"
+          action={action}
+        >
+          <Alert
             onClose={handleClose}
+            severity={snack.type}
+            variant="filled"
+            sx={{ width: '100%' }}
           >
-            <Alert
-              onClose={handleClose}
-              severity={snack.type}
-              sx={{ width: "100%" }}
-            >
-              {snack.message}
-            </Alert>
-          </MUISnackbar>
-        </Stack>
+            {snack.message}
+          </Alert>
+        </SnackbarMui>
       )}
-    </>
+    </div>
   );
 };
 

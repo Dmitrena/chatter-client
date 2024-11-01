@@ -1,21 +1,15 @@
-import SearchIcon from '@mui/icons-material/Search';
 import {
   Box,
   Button,
-  FormControlLabel,
-  FormGroup,
-  IconButton,
-  InputBase,
   Modal,
-  Paper,
   Stack,
-  Switch,
   TextField,
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { UNKNOWN_ERROR_MESSAGE } from '../../../constants/errors';
 import { useCreateChat } from '../../../hooks/useCreateChat';
+import { UNKNOWN_ERROR_MESSAGE } from '../../../constants/errors';
+import router from '../../Routes';
 
 interface ChatListAddProps {
   open: boolean;
@@ -23,7 +17,6 @@ interface ChatListAddProps {
 }
 
 const ChatListAdd = ({ open, handleClose }: ChatListAddProps) => {
-  const [isPrivate, setIsPrivate] = useState(false);
   const [error, setError] = useState('');
   const [name, setName] = useState('');
   const [createChat] = useCreateChat();
@@ -31,7 +24,6 @@ const ChatListAdd = ({ open, handleClose }: ChatListAddProps) => {
   const onClose = () => {
     setError('');
     setName('');
-    setIsPrivate(false);
     handleClose();
   };
 
@@ -54,51 +46,27 @@ const ChatListAdd = ({ open, handleClose }: ChatListAddProps) => {
           <Typography variant="h6" component="h2">
             Add Chat
           </Typography>
-          <FormGroup>
-            <FormControlLabel
-              style={{ width: 0 }}
-              control={
-                <Switch
-                  defaultChecked={isPrivate}
-                  value={isPrivate}
-                  onChange={(event) => setIsPrivate(event.target.checked)}
-                />
-              }
-              label="Private"
-            />
-          </FormGroup>
-          {isPrivate ? (
-            <Paper sx={{ p: '2px 4px', display: 'flex', alignItems: 'center' }}>
-              <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search Users" />
-              <IconButton sx={{ p: '10px' }}>
-                <SearchIcon />
-              </IconButton>
-            </Paper>
-          ) : (
-            <TextField
-              label="name"
-              error={!!error}
-              helperText={error}
-              onChange={(event) => setName(event.target.value)}
-            />
-          )}
+          <TextField
+            label="Name"
+            error={!!error}
+            helperText={error}
+            onChange={(event) => setName(event.target.value)}
+          />
           <Button
             variant="outlined"
             onClick={async () => {
               if (!name.length) {
-                setError('Chat name is required.');
+                setError('CHat name is required.');
                 return;
               }
               try {
-                await createChat({
+                const chat = await createChat({
                   variables: {
-                    createChatInput: {
-                      isPrivate,
-                      name: name || undefined,
-                    },
+                    createChatInput: { name: name || undefined },
                   },
                 });
                 onClose();
+                router.navigate(`/chats/${chat.data?.createChat._id}`);
               } catch (err) {
                 setError(UNKNOWN_ERROR_MESSAGE);
               }
@@ -111,4 +79,5 @@ const ChatListAdd = ({ open, handleClose }: ChatListAddProps) => {
     </Modal>
   );
 };
+
 export default ChatListAdd;
