@@ -1,8 +1,8 @@
-import ChatListItem from './chat-list-item/chatListItem';
+import ChatListItem from './chat-list-item/ChatListItem';
 import { Box, Divider, Stack } from '@mui/material';
 import ChatListHeader from './chat-list-header/ChatListHeader';
 import { useEffect, useState } from 'react';
-import ChatListAdd from './chat-list-add/chatListAdd';
+import ChatListAdd from './chat-list-add/ChatListAdd';
 import { useGetChats } from '../../hooks/useGetChats';
 import { usePath } from '../../hooks/usePath';
 import { useMessageCreated } from '../../hooks/useMessageCreated';
